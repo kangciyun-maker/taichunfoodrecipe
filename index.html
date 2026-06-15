@@ -1,1 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>太春行素食訂貨系統</title>
+
+<style>
+    .notice{
+    background:#fff8e1;
+    border:1px solid #ffd54f;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:20px;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.red{
+    color:red;
+    font-weight:bold;
+}
+
+body{
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:10px;
+    font-size:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+}
+
+h1{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.company-info{
+    text-align:center;
+    margin-bottom:20px;
+    line-height:1.8;
+}
+
+.company-info p{
+    margin:5px 0;
+    font-size:18px;
+}
+
+td{
+    padding:8px 6px;
+    border-bottom:1px solid #e0e0e0;
+    vertical-align:middle;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+#productTable td:first-child{
+    width:41%;
+    white-space:nowrap;
+    font-size:18px;
+    font-weight:500;
+}
+
+#productTable td:nth-child(2){
+    width:44%;
+}
+
+#productTable td:nth-child(3){
+    width:15%;
+    text-align:center;
+    white-space:nowrap;
+    color:#333;
+    font-size:18px;
+    font-weight:500;
+}
+input[type="text"]{
+    width:100%;
+    box-sizing:border-box;
+}
+input[type="text"]{
+    width:100%;
+    padding:10px;
+    font-size:18px;
+    box-sizing:border-box;
+    border:1px solid #dadce0;
+    border-radius:8px;
+    background:#fff;
+}
+input[type="text"]:focus{
+    outline:none;
+    border-color:#1a73e8;
+    box-shadow:0 0 0 2px rgba(26,115,232,.15);
+}
+
+input[type="checkbox"]{
+    transform: scale(1.15);
+    margin-right:6px;
+}
+
+select, textarea{
+    font-size:18px;
+}
+
+button{
+    width:100%;
+    padding:18px;
+    font-size:20px;
+    background:#2d7ef7;
+    color:white;
+    border:none;
+    border-radius:10px;
+    margin-top:15px;
+    cursor:pointer;
+}
+
+button.modify-btn {
+    background: #6c757d;
+    margin-bottom: 10px;
+}
+
+.result{
+    white-space:pre-wrap;
+    background:#f0f0f0;
+    padding:15px;
+    margin-top:15px;
+    font-size:18px;
+}
+
+.notice ol{
+    margin:8px 0 0 20px;
+    padding:0;
+}
+
+.notice li{
+    margin:4px 0;
+}
+
+#confirmArea {
+    margin-top: 20px;
+    border: 2px dashed #2d7ef7;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fdfdfd;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="formContainer" class="container">
+
+<h1>太春行素食訂貨單</h1>
+
+<div class="company-info">
+    <p><strong>電話：</strong>03-5336901</p>
+    <p><strong>地址：</strong>新竹市東區復中里經國路一段379巷10弄23號1樓</p>
+</div>
+<div class="notice">
+
+<b>訂購說明</b>
+
+<ol>
+    <li>
+        請先勾選欲購買的商品後再填寫數量，
+        <span class="red">未勾選之商品將不列入訂單。</span>
+    </li>
+
+    <li>
+        如需訂購表單未列出的商品，
+        <span class="red">請於備註欄註明商品名稱及數量。</span>
+    </li>
+
+    <li>
+        如有特殊需求、備註事項或其他說明，
+        <span class="red">請於備註欄詳細說明。</span>
+    </li>
+
+    <li>
+        同一商品分裝可使用「+」填寫數量，例如：2+4。不同商品需分裝時，
+        <span class="red">請分別下單。</span>
+    </li>
+</ol>
+
+</div>
+<p>
+訂貨日期：
+<span id="orderDate"></span>
+</p>
+
+<p>
+交貨日期：
+<select id="deliveryDate"></select>
+</p>
+<p style="color:red;font-weight:bold;">
+※ 請確認交貨日期後再送出訂單!!
+</p>
+
+<table id="productTable">
+
+<tr><td><input type="checkbox"> 豆干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 切干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 碎干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 小干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 干丁</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 胖干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 包干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 條干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 大印干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 非改小干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 非改小白干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 非改包干</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 素雞</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 切素雞</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 豆腸</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 麵腸</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 切麵腸</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 大干絲</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 白干絲</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 素肚</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 小豆包</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 大豆包</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 大麵輪</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+
+<tr><td><input type="checkbox"> 大三角</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 小三角</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 大四角</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 小四角</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+
+<tr><td><input type="checkbox"> 煮花生</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+
+<tr><td><input type="checkbox"> 豆包</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 炸豆包</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+
+<tr><td><input type="checkbox"> 海捲</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 海龍</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+<tr><td><input type="checkbox"> 海結</td><td><input type="text" placeholder="例：5、3+2"></td><td>斤</td></tr>
+
+<tr><td><input type="checkbox"> 大干</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 南大干</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 大黑干</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 真空黑干</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 大梅花</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 百頁豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 大豆漿</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+<tr><td><input type="checkbox"> 小豆漿</td><td><input type="text" placeholder="例：5、3+2"></td><td>包</td></tr>
+
+<tr><td><input type="checkbox"> 豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>板</td></tr>
+
+<tr><td><input type="checkbox"> 雞蛋豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>盒</td></tr>
+<tr><td><input type="checkbox"> 中華嫩豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>盒</td></tr>
+<tr><td><input type="checkbox"> 大漢板豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>盒</td></tr>
+<tr><td><input type="checkbox"> 中港板豆腐</td><td><input type="text" placeholder="例：5、3+2"></td><td>盒</td></tr>
+
+<tr><td><input type="checkbox"> 仙草</td><td><input type="text" placeholder="例：5、3+2"></td><td>桶</td></tr>
+<tr><td><input type="checkbox"> 愛玉</td><td><input type="text" placeholder="例：5、3+2"></td><td>桶</td></tr>
+<tr><td><input type="checkbox"> 小雞</td><td><input type="text" placeholder="例：5、3+2"></td><td>隻</td></tr>
+<tr><td><input type="checkbox"> 大白雞</td><td><input type="text" placeholder="例：5、3+2"></td><td>隻</td></tr>
+</table>
+<br>
+
+<b>備註：</b>
+<textarea id="note" rows="4" style="width:100%;padding:10px;"></textarea>
+
+<button id="checkOrderBtn" onclick="reviewOrder()">確認清單</button>
+
+<div id="confirmArea" style="display:none;">
+    <h3 style="color:#2d7ef7;margin-top:0;">請確認您的訂購清單：</h3>
+    <pre class="result" id="output"></pre>
+    <button class="modify-btn" onclick="modifyOrder()">修改訂單</button>
+    <button onclick="sendOrderToServer()">送出訂單</button>
+</div>
+
+</div>
+
+<script>
+
+// 全域變數
+let finalOrderText = "";
+let savedOrderData = {};
+let customerId = "未辨識顧客"; 
+
+// 自動從網址抓取客人身分
+function getCustomerFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('id')) {
+        customerId = urlParams.get('id');
+    }
+}
+
+function createDates(){
+    const today = new Date();
+
+    // 訂貨日期
+    let month = String(today.getMonth()+1).padStart(2,'0');
+    let day = String(today.getDate()).padStart(2,'0');
+
+    document.getElementById("orderDate").innerText = `${month}/${day}`;
+
+    // 交貨日期
+    const select = document.getElementById("deliveryDate");
+
+    for(let i=0;i<7;i++){
+        let d = new Date();
+        d.setDate(today.getDate()+i);
+
+        let m = String(d.getMonth()+1).padStart(2,'0');
+        let da = String(d.getDate()).padStart(2,'0');
+
+        let option = document.createElement("option");
+        option.value = `${m}/${da}`;
+        option.text = `${m}/${da}`;
+
+        select.appendChild(option);
+    }
+}
+
+createDates();
+getCustomerFromUrl(); 
+
+function getTime(){
+    const d = new Date();
+    const h = String(d.getHours()).padStart(2,'0');
+    const m = String(d.getMinutes()).padStart(2,'0');
+    return `${h}:${m}`;
+}
+
+// 點擊「清單確認」
+function reviewOrder(){
+    const orderDate = document.getElementById("orderDate").innerText;
+    const deliveryDate = document.getElementById("deliveryDate").value;
+    const time = getTime();
+    const note = document.getElementById("note").value;
+    const rows = document.querySelectorAll("#productTable tr");
+
+    let result = "太春行素食\n\n"; // 拿掉了顧客身分那一行，直接換行
+    result += "訂貨日期：" + orderDate + "\n";
+    result += "交貨日期：" + deliveryDate + "\n";
+    result += "送單時間：" + time + "\n\n";
+
+    let hasItems = false;
+
+    rows.forEach(row => {
+        const checkbox = row.querySelector("input[type='checkbox']");
+        const qtyInput = row.querySelector("input[type='text']"); 
+        
+        if(checkbox && qtyInput) {
+            const qty = qtyInput.value.trim();
+            const name = row.children[0].innerText.trim();
+            const unit = row.children[2].innerText;
+
+            if(checkbox.checked && qty !== ""){
+                result += `${name} ${qty}${unit}\n`;
+                hasItems = true;
+            }
+        }
+    });
+
+    if(note.trim() !== ""){
+        result += "\n備註：\n" + note;
+    }
+
+    if(!hasItems && note.trim() === ""){
+        alert("您尚未勾選任何商品或填寫備註唷！");
+        return;
+    }
+
+    finalOrderText = result;
+    savedOrderData = {
+        orderDate: orderDate,
+        deliveryDate: deliveryDate,
+        time: time,
+        note: note
+    };
+
+    document.getElementById("output").innerText = result;
+    document.getElementById("confirmArea").style.display = "block";
+    document.getElementById("confirmArea").scrollIntoView({ behavior: 'smooth' });
+}
+
+function modifyOrder() {
+    document.getElementById("confirmArea").style.display = "none";
+    document.getElementById("productTable").scrollIntoView({ behavior: 'smooth' });
+}
+
+// 點擊「送出訂單」
+function sendOrderToServer(){
+    alert("開始送單，請稍後");
+
+    fetch("https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec", {
+        method: "POST",
+        body: JSON.stringify({
+            customerId: customerId, // 後台依然會收到客人專屬名字，不影響功能
+            orderDate: savedOrderData.orderDate,
+            deliveryDate: savedOrderData.deliveryDate,
+            time: savedOrderData.time,
+            orderText: finalOrderText,
+            note: savedOrderData.note
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert("訂單已順利送出！");
+        
+        document.getElementById("confirmArea").style.display = "none";
+        document.getElementById("note").value = "";
+        
+        const rows = document.querySelectorAll("#productTable tr");
+        rows.forEach(row => {
+            const checkbox = row.querySelector("input[type='checkbox']");
+            const qtyInput = row.querySelector("input[type='text']");
+            
+            if (checkbox) checkbox.checked = false;
+            if (qtyInput) qtyInput.value = "";
+        });
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(error => {
+        alert("送出失敗，請檢查網路或再試一次！");
+        console.log(error);
+    });
+}
+
+</script>
+
+</body>
+</html>
