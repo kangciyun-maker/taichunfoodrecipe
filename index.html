@@ -11,7 +11,7 @@ body {
     background: #f5f5f5;
     margin: 0;
     padding: 8px;
-    font-size: 20px;
+    font-size: 20px; /* 回復原本的字體大小 */
 }
 .container {
     max-width: 100%;
@@ -48,25 +48,25 @@ h1 {
 .notice ol { margin: 8px 0 0 20px; padding: 0; }
 .notice li { margin: 6px 0; }
 
-/* 🌟 日期與客戶選擇區 🌟 */
+/* 🌟 日期選擇區：回復原本字體大小，純加上漂亮的藍色框框 🌟 */
 .date-section {
     background: #e8f0fe;
-    border: 2px dashed #2d7ef7;
+    border: 2px dashed #2d7ef7; /* 藍色虛線邊框 */
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 20px;
-    font-size: 20px;
+    font-size: 20px; /* 回復原本字體大小 */
 }
 .date-section p { margin: 8px 0; }
 select {
-    font-size: 20px;
+    font-size: 20px; /* 回復原本字體大小 */
     padding: 5px;
     border-radius: 6px;
     border: 1px solid #2d7ef7;
     background: white;
 }
 
-/* 手機彈性卡片排列 */
+/* 核心改版：拋棄 Table，改用手機彈性卡片排列 */
 .product-list {
     display: flex;
     flex-direction: column;
@@ -78,12 +78,13 @@ select {
     border-radius: 10px;
     padding: 12px;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* 精髓：字體太大時會自動換行，絕不擠壓 */
     align-items: center;
     gap: 10px;
     cursor: pointer;
     transition: background 0.2s;
 }
+/* 當被勾選時，卡片背景變淡藍色，方便長輩辨識 */
 .product-item.selected {
     background: #e8f0fe;
     border-color: #1a73e8;
@@ -92,18 +93,18 @@ select {
     display: flex;
     align-items: center;
     font-weight: bold;
-    min-width: 140px;
+    min-width: 140px; /* 保證品名有一定寬度 */
     flex: 1 1 auto;
 }
 input[type="checkbox"] {
-    transform: scale(1.4);
+    transform: scale(1.4); /* 放大勾選框，好按 */
     margin-right: 12px;
 }
 .input-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 2 1 200px;
+    flex: 2 1 200px; /* 讓輸入框佔據剩餘的所有空間，最少有 200px 寬 */
     width: 100%;
 }
 input[type="text"] {
@@ -173,8 +174,218 @@ button {
 </ol>
 </div>
 
+<!-- 漂亮的藍色日期框框（維持原本大小） -->
 <div class="date-section">
-    <p>客戶姓名：<span id="customerNameDisplay" style="font-weight:bold; color:#e91e63;">正在讀取客戶資料...</span></p>
     <p>訂貨日期：<span id="orderDate" style="font-weight:bold; color:#1a73e8;"></span></p>
     <p>交貨日期：<select id="deliveryDate"></select></p>
-    <p style="color:red;font-weight:bold;margin:8px 0 0 0;font-size:
+    <p style="color:red;font-weight:bold;margin:8px 0 0 0;font-size:18px;">※ 請確認交貨日期後再送出訂單!!</p>
+</div>
+
+<!-- 商品清單 -->
+<div class="product-list" id="productContainer">
+    <!-- 由 JS 自動生成 -->
+</div>
+
+<br>
+<b>備註：</b>
+<textarea id="note" rows="4"></textarea>
+
+<button id="checkOrderBtn" onclick="reviewOrder()">確認清單</button>
+
+<div id="confirmArea" style="display:none;">
+    <h3 style="color:#2d7ef7;margin-top:0;">請確認您的訂購清單：</h3>
+    <pre class="result" id="output"></pre>
+    <button class="modify-btn" onclick="modifyOrder()">修改訂單</button>
+    
+    <button id="sendOrderBtn" onclick="sendOrderToServer()" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <span id="spinner" style="display: none; width: 20px; height: 20px; border: 3px solid #ffffff; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></span>
+        <span id="btnText">送出訂單</span>
+    </button>
+</div>
+
+<style>
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+</div>
+
+<script>
+const products = [
+    ["豆干","斤"],["切干","斤"],["碎干","斤"],["小干","斤"],["干丁","斤"],["胖干","斤"],["包干","斤"],["條干","斤"],["大印干","斤"],["非改小干","斤"],["非改小白干","斤"],["非改包干","斤"],["素雞","斤"],["切素雞","斤"],["豆腸","斤"],["麵腸","斤"],["切麵腸","斤"],["大干絲","斤"],["白干絲","斤"],["素肚","斤"],["小豆包","斤"],["大豆包","斤"],["大麵輪","斤"],["大三角","斤"],["小三角","斤"],["大四角","斤"],["小四角","斤"],["煮花生","斤"],["豆包","斤"],["炸豆包","斤"],["海捲","斤"],["海龍","斤"],["海結","斤"],["大干","包"],["南大干","包"],["大黑干","包"],["真空黑干","包"],["大梅花","包"],["百頁豆腐","包"],["大豆漿","包"],["小豆漿","包"],["豆腐","板"],["雞蛋豆腐","盒"],["中華嫩豆腐","盒"],["大漢板豆腐","盒"],["中港板豆腐","盒"],["仙草","桶"],["愛玉","桶"],["小雞","隻"],["大白雞","隻"]
+];
+
+let finalOrderText = "";
+let savedOrderData = {};
+let customerId = "未辨識顧客"; 
+
+function renderProducts() {
+    const container = document.getElementById("productContainer");
+    products.forEach((prod, index) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "product-item";
+        itemDiv.id = `item_${index}`;
+        
+        itemDiv.onclick = function(e) {
+            if(e.target.tagName !== 'INPUT') {
+                const chk = this.querySelector('input[type="checkbox"]');
+                chk.checked = !chk.checked;
+                toggleHighlight(this, chk.checked);
+            }
+        };
+
+        itemDiv.innerHTML = `
+            <div class="product-label">
+                <input type="checkbox" id="chk_${index}" onchange="toggleHighlight(this.closest('.product-item'), this.checked)">
+                <label style="cursor:pointer;">${prod[0]}</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="qty_${index}" placeholder="例：5、3+2" onclick="event.stopPropagation();">
+                <span class="unit">${prod[1]}</span>
+            </div>
+        `;
+        container.appendChild(itemDiv);
+    });
+}
+
+function toggleHighlight(element, isChecked) {
+    if(isChecked) {
+        element.classList.add("selected");
+    } else {
+        element.classList.remove("selected");
+    }
+}
+
+function getCustomerFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('id')) {
+        customerId = urlParams.get('id');
+    }
+}
+
+function createDates(){
+    const today = new Date();
+    let month = String(today.getMonth()+1).padStart(2,'0');
+    let day = String(today.getDate()).padStart(2,'0');
+    document.getElementById("orderDate").innerText = `${month}/${day}`;
+    const select = document.getElementById("deliveryDate");
+    for(let i=0;i<7;i++){
+        let d = new Date();
+        d.setDate(today.getDate()+i);
+        let m = String(d.getMonth()+1).padStart(2,'0');
+        let da = String(d.getDate()).padStart(2,'0');
+        let option = document.createElement("option");
+        option.value = `${m}/${da}`;
+        option.text = `${m}/${da}`;
+        select.appendChild(option);
+    }
+}
+
+function reviewOrder(){
+    const orderDate = document.getElementById("orderDate").innerText;
+    const deliveryDate = document.getElementById("deliveryDate").value;
+    const note = document.getElementById("note").value;
+
+    // 🌟 這裡幫你改成乾淨的格式，拿掉了下單時間，加上交貨日期與備註事項
+    let result = "【太春行素食新訂單】\n\n"; 
+    result += "交貨日期：" + deliveryDate + "\n\n";
+    result += "訂單內容：\n";
+
+    let itemsOnlyText = ""; // 專門用來收集純商品項目送給後台
+    let hasItems = false;
+    
+    products.forEach((prod, index) => {
+        const checkbox = document.getElementById(`chk_${index}`);
+        const qtyInput = document.getElementById(`qty_${index}`);
+        if(checkbox && qtyInput) {
+            const qty = qtyInput.value.trim();
+            if(checkbox.checked && qty !== ""){
+                itemsOnlyText += `${prod[0]}: ${qty}${prod[1]}\n`;
+                hasItems = true;
+            }
+        }
+    });
+
+    result += itemsOnlyText === "" ? "（未勾選商品）\n" : itemsOnlyText;
+    result += "\n備註事項：" + (note.trim() !== "" ? note : "無備註");
+
+    if(!hasItems && note.trim() === ""){
+        alert("您尚未勾選任何商品或填寫備註唷！");
+        return;
+    }
+
+    finalOrderText = itemsOnlyText.trim(); // 只把純商品交給後台組裝
+    savedOrderData = { orderDate, deliveryDate, note };
+    document.getElementById("output").innerText = result;
+    document.getElementById("confirmArea").style.display = "block";
+    document.getElementById("confirmArea").scrollIntoView({ behavior: 'smooth' });
+}
+
+function modifyOrder() {
+    document.getElementById("confirmArea").style.display = "none";
+    window.scrollTo({ top: document.getElementById("productContainer").offsetTop, behavior: 'smooth' });
+}
+
+function sendOrderToServer(){
+    const btn = document.getElementById("sendOrderBtn");
+    const spinner = document.getElementById("spinner");
+    const btnText = document.getElementById("btnText");
+
+    btn.disabled = true;
+    btn.style.background = "#a0c5fc";
+    spinner.style.display = "inline-block";
+    btnText.innerText = "送單中，請稍後...";
+
+    // ⚠️ 請記得把這裡換成你剛才「重新部署」成功後的最新 Google API 網址 ⚠️
+    const latestGasUrl = "https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec";
+
+    fetch(latestGasUrl, {
+        method: "POST",
+        body: JSON.stringify({
+            id: customerId, 
+            deliveryTime: savedOrderData.deliveryDate, // 送給後台的交貨時間
+            items: finalOrderText, // 送給後台的純訂單內容
+            memo: savedOrderData.note // 送給後台的備註
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("訂單已送出，感謝您的訂購!");
+        
+        document.getElementById("confirmArea").style.display = "none";
+        document.getElementById("note").value = "";
+        
+        products.forEach((prod, index) => {
+            const checkbox = document.getElementById(`chk_${index}`);
+            const qtyInput = document.getElementById(`qty_${index}`);
+            const itemDiv = document.getElementById(`item_${index}`);
+            if (checkbox) checkbox.checked = false;
+            if (qtyInput) qtyInput.value = "";
+            if (itemDiv) itemDiv.classList.remove("selected");
+        });
+        
+        btn.disabled = false;
+        btn.style.background = "#2d7ef7";
+        spinner.style.display = "none";
+        btnText.innerText = "送出訂單";
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(error => {
+        alert("送出失敗，請檢查網路或再試一次！");
+        console.log(error);
+        btn.disabled = false;
+        btn.style.background = "#2d7ef7";
+        spinner.style.display = "none";
+        btnText.innerText = "送出訂單";
+    });
+}
+
+renderProducts();
+createDates();
+getCustomerFromUrl();
+</script>
+</body>
+</html>
