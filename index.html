@@ -391,6 +391,38 @@ function sendOrderToServer(){
 renderProducts();
 createDates();
 getCustomerFromUrl();
+    // 當網頁一打開，立刻自動執行
+window.onload = function() {
+    // 1. 自動抓取網址後面的 id (例如 ?id=6997)
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    
+    if (id) {
+        // 2. 這裡請換成你剛剛在步驟一複製的那串 Google Web App 網址！
+        const gasUrl = "你的Google_Web_App最新部署網址" + "?id=" + id;
+        
+        // 3. 用這個代碼去問 Google 名字
+        fetch(gasUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 成功找到客戶！自動把名字塞進你網頁的「姓名輸入框」
+                // 💡 注意：請把下面的 "nameInput" 換成你網頁姓名輸入框的實際 id
+                if (document.getElementById("nameInput")) {
+                    document.getElementById("nameInput").value = data.name;
+                    document.getElementById("nameInput").readOnly = true; // 鎖定欄位，客人才不會手誤改到名字！
+                }
+                console.log("成功辨識客戶：" + data.name);
+            } else {
+                alert("找不到這個客戶代碼，請確認專屬連結是否正確！");
+            }
+        })
+        .catch(error => console.error("連線發生錯誤:", error));
+    } else {
+        // 如果客人直接打網址進來，沒有帶代碼的提示（可以不寫，或者提醒他）
+        alert("歡迎光臨太春行！請使用給您的專屬連結進入下單喔！");
+    }
+};
 </script>
 </body>
 </html>
