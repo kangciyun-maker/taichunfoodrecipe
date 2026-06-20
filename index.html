@@ -131,4 +131,53 @@ input[type="text"]:focus {
 textarea {
     width: 100%;
     padding: 10px;
-    font-size
+    font-size: 20px;
+    box-sizing: border-box;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+}
+button {
+    width: 100%;
+    padding: 18px;
+    font-size: 22px;
+    background: #2d7ef7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.modify-btn { background: #6c757d; margin-bottom: 10px; }
+.result { white-space: pre-wrap; background: #f0f0f0; padding: 15px; margin-top: 15px; font-size: 18px; }
+#confirmArea { margin-top: 20px; border: 2px dashed #2d7ef7; padding: 15px; border-radius: 10px; background: #fdfdfd; }
+</style>
+</head>
+<body>
+
+<div id="formContainer" class="container">
+
+<h1>太春行素食訂貨單</h1>
+
+<div class="company-info">
+    <p><strong>電話：</strong>03-5336901</p>
+    <p><strong>地址：</strong>新竹市東區復中里經國路一段379巷10弄23號1樓</p>
+</div>
+
+<div class="notice">
+<b>訂購說明</b>
+<ol>
+    <li>請先勾選欲購買的商品後再填寫數量，<span class="red">未勾選之商品將不列入訂單。</span></li>
+    <li>如需訂購表單未列出的商品，<span class="red">請於備註欄註明商品名稱及數量。</span></li>
+    <li>如有特殊需求、備註事項或其他說明，<span class="red">請於備註欄詳細說明。</span></li>
+    <li>同一商品分裝可使用「+」填寫數量，例如：2+4。不同商品需分裝時，<span class="red">請分別下單。</span></li>
+</ol>
+</div>
+
+<div class="date-section">
+    <p>訂貨日期：<span id="orderDate" style="font-weight:bold; color:#1a73e8;"></span></p>
+    <p>交貨日期：<select id="deliveryDate"></select></p>
+    <p style="color:red;font-weight:bold;margin:8px 0 0 0;font-size:18px;">※ 請確認交貨日期後再送出訂單!!</p>
+</div>
+
+<div class="product-list" id="productContainer">
