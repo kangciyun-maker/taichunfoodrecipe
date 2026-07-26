@@ -14,7 +14,7 @@ body {
     background: #f5f5f5;
     margin: 0;
     padding: 8px;
-    font-size: 20px; /* 回復原本的字體大小 */
+    font-size: 20px;
 }
 .container {
     max-width: 100%;
@@ -51,25 +51,25 @@ h1 {
 .notice ol { margin: 8px 0 0 20px; padding: 0; }
 .notice li { margin: 6px 0; }
 
-/* 🌟 日期選擇區：回復原本字體大小，純加上漂亮的藍色框框 🌟 */
+/* 日期選擇區 */
 .date-section {
     background: #e8f0fe;
-    border: 2px dashed #2d7ef7; /* 藍色虛線邊框 */
+    border: 2px dashed #2d7ef7;
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 20px;
-    font-size: 20px; /* 回復原本字體大小 */
+    font-size: 20px;
 }
 .date-section p { margin: 8px 0; }
 select {
-    font-size: 20px; /* 回復原本字體大小 */
+    font-size: 20px;
     padding: 5px;
     border-radius: 6px;
     border: 1px solid #2d7ef7;
     background: white;
 }
 
-/* 核心改版：拋棄 Table，改用手機彈性卡片排列 */
+/* 卡片排列 */
 .product-list {
     display: flex;
     flex-direction: column;
@@ -81,13 +81,12 @@ select {
     border-radius: 10px;
     padding: 12px;
     display: flex;
-    flex-wrap: wrap; /* 精髓：字體太大時會自動換行，絕不擠壓 */
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     transition: background 0.2s;
 }
-/* 當被勾選時，卡片背景變淡藍色，方便長輩辨識 */
 .product-item.selected {
     background: #e8f0fe;
     border-color: #1a73e8;
@@ -96,18 +95,18 @@ select {
     display: flex;
     align-items: center;
     font-weight: bold;
-    min-width: 140px; /* 保證品名有一定寬度 */
+    min-width: 140px;
     flex: 1 1 auto;
 }
 input[type="checkbox"] {
-    transform: scale(1.4); /* 放大勾選框，好按 */
+    transform: scale(1.4);
     margin-right: 12px;
 }
 .input-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 2 1 200px; /* 讓輸入框佔據剩餘的所有空間，最少有 200px 寬 */
+    flex: 2 1 200px;
     width: 100%;
 }
 input[type="text"] {
@@ -130,7 +129,7 @@ input[type="text"]:focus {
     white-space: nowrap;
 }
 
-/* 備註與按鈕 */
+/* 備註與按鈕：僅設定備註下方留白 5 公分 */
 textarea {
     width: 100%;
     padding: 10px;
@@ -138,6 +137,7 @@ textarea {
     box-sizing: border-box;
     border: 1px solid #dadce0;
     border-radius: 8px;
+    margin-bottom: 5cm; /* 精準留白 5 公分 */
 }
 button {
     width: 100%;
@@ -219,7 +219,7 @@ const products = [
 
 let finalOrderText = "";
 let savedOrderData = {};
-let customerId = "未辨識顧客"; 
+let customerId = ""; // 未辨識顧客時預設留白
 
 function renderProducts() {
     const container = document.getElementById("productContainer");
@@ -290,7 +290,6 @@ function reviewOrder(){
 
     let result = "【太春行素食新訂單】\n\n"; 
     result += "交貨日期：" + deliveryDate + "\n\n";
-    result += "訂單內容：\n";
 
     let itemsOnlyText = ""; 
     let hasItems = false;
@@ -301,15 +300,18 @@ function reviewOrder(){
         if(checkbox && qtyInput) {
             const qty = qtyInput.value.trim();
             if(checkbox.checked && qty !== ""){
-                // 🌟 這裡修改：商品名稱與數量中間完全使用「空格」隔開，拿掉冒號了！
                 itemsOnlyText += `${prod[0]} ${qty}${prod[1]}\n`;
                 hasItems = true;
             }
         }
     });
 
-    result += itemsOnlyText === "" ? "（未勾選商品）\n" : itemsOnlyText;
-    result += "\n備註事項：" + (note.trim() !== "" ? note : "無備註");
+    // 如果有選購商品，才顯示「訂單內容：」及商品項目
+    if(hasItems) {
+        result += "訂單內容：\n" + itemsOnlyText + "\n";
+    }
+
+    result += "備註事項：" + (note.trim() !== "" ? note : "無備註");
 
     if(!hasItems && note.trim() === ""){
         alert("您尚未勾選任何商品或填寫備註唷！");
