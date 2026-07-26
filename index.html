@@ -129,7 +129,7 @@ input[type="text"]:focus {
     white-space: nowrap;
 }
 
-/* 備註與按鈕：僅設定備註下方留白 5 公分 */
+/* 備註與按鈕：網頁上保持正常間距 */
 textarea {
     width: 100%;
     padding: 10px;
@@ -137,7 +137,7 @@ textarea {
     box-sizing: border-box;
     border: 1px solid #dadce0;
     border-radius: 8px;
-    margin-bottom: 5cm; /* 精準留白 5 公分 */
+    margin-bottom: 15px;
 }
 button {
     width: 100%;
@@ -154,6 +154,16 @@ button {
 .modify-btn { background: #6c757d; margin-bottom: 10px; }
 .result { white-space: pre-wrap; background: #f0f0f0; padding: 15px; margin-top: 15px; font-size: 18px; }
 #confirmArea { margin-top: 20px; border: 2px dashed #2d7ef7; padding: 15px; border-radius: 10px; background: #fdfdfd; }
+
+/* 🌟 專屬列印設定：只有印出來時最下方才會留空白 5cm 🌟 */
+@media print {
+    body {
+        padding-bottom: 5cm;
+    }
+    button, .modify-btn {
+        display: none !important; /* 印出時自動隱藏按鈕 */
+    }
+}
 </style>
 </head>
 <body>
@@ -219,7 +229,7 @@ const products = [
 
 let finalOrderText = "";
 let savedOrderData = {};
-let customerId = ""; // 未辨識顧客時預設留白
+let customerId = ""; // 未辨識顧客預設留白
 
 function renderProducts() {
     const container = document.getElementById("productContainer");
@@ -306,7 +316,6 @@ function reviewOrder(){
         }
     });
 
-    // 如果有選購商品，才顯示「訂單內容：」及商品項目
     if(hasItems) {
         result += "訂單內容：\n" + itemsOnlyText + "\n";
     }
