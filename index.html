@@ -129,7 +129,7 @@ input[type="text"]:focus {
     white-space: nowrap;
 }
 
-/* 備註與按鈕：網頁上保持正常間距 */
+/* 備註與按鈕 */
 textarea {
     width: 100%;
     padding: 10px;
@@ -154,16 +154,6 @@ button {
 .modify-btn { background: #6c757d; margin-bottom: 10px; }
 .result { white-space: pre-wrap; background: #f0f0f0; padding: 15px; margin-top: 15px; font-size: 18px; }
 #confirmArea { margin-top: 20px; border: 2px dashed #2d7ef7; padding: 15px; border-radius: 10px; background: #fdfdfd; }
-
-/* 🌟 專屬列印設定：只有印出來時最下方才會留空白 5cm 🌟 */
-@media print {
-    body {
-        padding-bottom: 5cm;
-    }
-    button, .modify-btn {
-        display: none !important; /* 印出時自動隱藏按鈕 */
-    }
-}
 </style>
 </head>
 <body>
@@ -229,7 +219,7 @@ const products = [
 
 let finalOrderText = "";
 let savedOrderData = {};
-let customerId = ""; // 未辨識顧客預設留白
+let customerId = "";
 
 function renderProducts() {
     const container = document.getElementById("productContainer");
@@ -351,13 +341,16 @@ function sendOrderToServer(){
 
     const latestGasUrl = "https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec";
 
+    // 🌟 在傳給印表機的備註後方加上 12 個換行，強迫出單機多捲 5 公分紙！
+    const memoWithSpacing = (savedOrderData.note || "無備註") + "\n\n\n\n\n\n\n\n\n\n\n\n";
+
     fetch(latestGasUrl, {
         method: "POST",
         body: JSON.stringify({
             id: customerId, 
             deliveryTime: savedOrderData.deliveryDate, 
             items: finalOrderText, 
-            memo: savedOrderData.note 
+            memo: memoWithSpacing 
         })
     })
     .then(response => response.json())
