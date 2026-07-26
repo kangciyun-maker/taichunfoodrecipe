@@ -310,7 +310,6 @@ function reviewOrder(){
         result += "訂單內容：\n" + itemsOnlyText + "\n";
     }
 
-    // 🌟 網頁預覽：有寫備註才顯示，沒寫就不顯示
     if(note.trim() !== "") {
         result += "備註事項：" + note;
     }
@@ -344,17 +343,13 @@ function sendOrderToServer(){
 
     const latestGasUrl = "https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec";
 
-    // 🌟 傳給後端與印表機：有填備註就帶備註，沒填備註就留空（完全不帶字），最後一樣多補 12 個換行留白 5 公分
-    const memoContent = savedOrderData.note.trim() !== "" ? savedOrderData.note : "";
-    const memoWithSpacing = memoContent + "\n\n\n\n\n\n\n\n\n\n\n\n";
-
     fetch(latestGasUrl, {
         method: "POST",
         body: JSON.stringify({
             id: customerId, 
             deliveryTime: savedOrderData.deliveryDate, 
             items: finalOrderText, 
-            memo: memoWithSpacing 
+            memo: savedOrderData.note.trim() 
         })
     })
     .then(response => response.json())
