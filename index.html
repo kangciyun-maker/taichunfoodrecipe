@@ -337,9 +337,10 @@ function sendOrderToServer(){
     const btnText = document.getElementById("btnText");
 
     btn.disabled = true;
-    btn.style.background = "#a0c5fc";
-    spinner.style.display = "inline-block";
-    btnText.innerText = "送單中，請稍後...";
+btn.style.background = "#999999";
+btn.style.cursor = "not-allowed";
+spinner.style.display = "inline-block";
+btnText.innerText = "送單中，請勿重複點擊...";
 
     const latestGasUrl = "https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec";
 
@@ -369,9 +370,10 @@ function sendOrderToServer(){
         });
         
         btn.disabled = false;
-        btn.style.background = "#2d7ef7";
-        spinner.style.display = "none";
-        btnText.innerText = "送出訂單";
+btn.style.background = "#2d7ef7";
+btn.style.cursor = "pointer";
+spinner.style.display = "none";
+btnText.innerText = "送出訂單";
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     })
@@ -379,9 +381,10 @@ function sendOrderToServer(){
         alert("送出失敗，請檢查網路或再試一次！");
         console.log(error);
         btn.disabled = false;
-        btn.style.background = "#2d7ef7";
-        spinner.style.display = "none";
-        btnText.innerText = "送出訂單";
+btn.style.background = "#2d7ef7";
+btn.style.cursor = "pointer";
+spinner.style.display = "none";
+btnText.innerText = "送出訂單";
     });
 }
 
