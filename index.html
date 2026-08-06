@@ -337,15 +337,20 @@ function sendOrderToServer(){
     const btnText = document.getElementById("btnText");
 
     btn.disabled = true;
-btn.style.background = "#999999";
-btn.style.cursor = "not-allowed";
-spinner.style.display = "inline-block";
-btnText.innerText = "送單中，請勿重複點擊...";
+    btn.style.background = "#999999";
+    btn.style.cursor = "not-allowed";
+    spinner.style.display = "inline-block";
+    btnText.innerText = "送單中，請勿重複點擊...";
 
     const latestGasUrl = "https://script.google.com/macros/s/AKfycbzd_V8VXFnMP1yepbDve2wUZKe9QNXjbPEllQnHzYvAfgcPvNW_teeNKKSw_u0ux7FL4g/exec";
 
+    // 🌟 核心修正：加入 mode: "no-cors" 解決瀏覽器跨域擋抓問題
     fetch(latestGasUrl, {
         method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "text/plain"
+        },
         body: JSON.stringify({
             id: customerId, 
             deliveryTime: savedOrderData.deliveryDate, 
@@ -353,8 +358,7 @@ btnText.innerText = "送單中，請勿重複點擊...";
             memo: savedOrderData.note.trim() 
         })
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(() => {
         alert("訂單已送出，感謝您的訂購!");
         
         document.getElementById("confirmArea").style.display = "none";
@@ -370,10 +374,10 @@ btnText.innerText = "送單中，請勿重複點擊...";
         });
         
         btn.disabled = false;
-btn.style.background = "#2d7ef7";
-btn.style.cursor = "pointer";
-spinner.style.display = "none";
-btnText.innerText = "送出訂單";
+        btn.style.background = "#2d7ef7";
+        btn.style.cursor = "pointer";
+        spinner.style.display = "none";
+        btnText.innerText = "送出訂單";
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     })
@@ -381,10 +385,10 @@ btnText.innerText = "送出訂單";
         alert("送出失敗，請檢查網路或再試一次！");
         console.log(error);
         btn.disabled = false;
-btn.style.background = "#2d7ef7";
-btn.style.cursor = "pointer";
-spinner.style.display = "none";
-btnText.innerText = "送出訂單";
+        btn.style.background = "#2d7ef7";
+        btn.style.cursor = "pointer";
+        spinner.style.display = "none";
+        btnText.innerText = "送出訂單";
     });
 }
 
